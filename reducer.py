@@ -14,13 +14,14 @@ current_word = None
 current_count = 0
 word = None
 
-# input comes from STDIN
+#tracking individual tokens
 for line in sys.stdin:
-    # remove leading and trailing whitespace
+    # removing whitespaces from documents
     line = line.strip()
+    #converting all tokens to lower case
     line=line.lower()
 
-    # parse the input we got from mapper.py
+    # shuffle and sorting of tokens
     word, count = line.split('\t', 1)
     try:
       count = int(count)
@@ -28,17 +29,18 @@ for line in sys.stdin:
       #error handling of count not being a number
       continue
 
-    # this IF-switch only works because Hadoop sorts map output
-    # by key (here: word) before it is passed to the reducer
+    #for word, count pairs if a words has already been seen add one to the count
+    #for word, count pairs if a words has not yet been seen add one
     if current_word == word:
         current_count += count
     else:
         if current_word:
-            #  result to STDOUT
             print ('%s\t%s' % (current_word, current_count))
+        #final value is total count
+        #  final key is word  
         current_count = count
         current_word = word
 
-# do not forget to output the last word if needed!
+# printing out the final word, count value pairs
 if current_word == word:
     print( '%s\t%s' % (current_word, current_count))
