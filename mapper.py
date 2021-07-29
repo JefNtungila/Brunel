@@ -15,16 +15,28 @@ nltk.download('stopwords',quiet=True)
 from nltk.corpus import stopwords
 punctuations = '''!()-[]{};:'"\,<>./?@#$%^&*_~'''
 
+#creating a set of stopwords 
 stop_words = set(stopwords.words('english'))
+
+#tracking the individual words and setting them as input
 input_stream = io.TextIOWrapper(sys.stdin.buffer, encoding='latin1')
+
+
 for line in input_stream:
+
+  #splitting the input tweets/docs into tokens
   line = line.strip()
+  #cleaning the tokens by keeping common tokens
   line = re.sub(r'[^\w\s]', '',line)
+  #converting all characters to lower case
   line = line.lower()
+  #removing punctuation
   for x in line:
     if x in punctuations:
       line=line.replace(x, " ") 
 
+  #removing stopwords 
+  #storing the processed docs 
   words=line.split()
   for word in words: 
     if word not in stop_words:
